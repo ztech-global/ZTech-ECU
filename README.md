@@ -9,7 +9,7 @@
 
 <p align="center">
   <img alt="Status"   src="https://img.shields.io/badge/Status-in%20development-yellow">
-  <img alt="Firmware" src="https://img.shields.io/badge/Firmware-v0.09-blue">
+  <img alt="Firmware" src="https://img.shields.io/badge/Firmware-v0.01-blue">
   <img alt="MCU"      src="https://img.shields.io/badge/MCU-ATmega32U4-orange">
   <img alt="Engine"   src="https://img.shields.io/badge/Engine-2--stroke%20%C2%B7%201%20cyl-lightgrey">
   <img alt="Tuning"   src="https://img.shields.io/badge/Tuning-TunerStudio-informational">
