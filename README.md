@@ -9,8 +9,9 @@
 
 <p align="center">
   <img alt="Status"   src="https://img.shields.io/badge/Status-in%20development-yellow">
-  <img alt="Firmware" src="https://img.shields.io/badge/Firmware-v0.01-blue">
+  <img alt="Firmware" src="https://img.shields.io/badge/Firmware-v0.09-blue">
   <img alt="MCU"      src="https://img.shields.io/badge/MCU-ATmega32U4-orange">
+  <img alt="Engine"   src="https://img.shields.io/badge/Engine-2--stroke%20%C2%B7%201%20cyl-lightgrey">
   <img alt="Tuning"   src="https://img.shields.io/badge/Tuning-TunerStudio-informational">
   <img alt="License"  src="https://img.shields.io/badge/License-GPLv3-green">
   <img alt="Issues"   src="https://img.shields.io/github/issues/mr-i-k-s/ztech-ecu">
@@ -18,7 +19,8 @@
 </p>
 
 <p align="center">
-  <b>An open-source, DIY-friendly Engine Management System (ECU) based on ATmega32U4.</b>
+  <b>An open-source, DIY-friendly Engine Management System (ECU) for small single-cylinder
+  two-stroke engines, based on the ATmega32U4.</b>
 </p>
 
 ---
@@ -31,7 +33,10 @@
 ## About
 
 ZTech ECU is an open engine management system – hardware, firmware and
-configuration in one place. Tuning is done through TunerStudio, and flashing is done conveniently over USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthusiasts.
+configuration in one place. It runs a single-cylinder two-stroke engine: ignition, fuel
+injection (Alpha-N) and electronic **separate lubrication** via a metering oil pump, so no
+premix is required. Tuning is done through TunerStudio, and flashing is done conveniently over
+USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthusiasts.
 
 ## ✨ Features
 
@@ -42,11 +47,18 @@ configuration in one place. Tuning is done through TunerStudio, and flashing is 
 - **Per-tooth tracking:** spark timing is refined on every tooth as RPM changes
 
 ### ⛽ Fuel Injection (Alpha-N)
-- **VE table** over throttle position × RPM
-- **Corrections:** warm-up, cranking enrichment, after-start, acceleration, intake air temperature
+- **VE table** over throttle position × RPM, injection once per revolution
+- **Corrections:** warm-up, cranking enrichment, after-start, acceleration, intake air temperature, and barometric (altitude / air density)
 - **Injector dead time** compensated for battery voltage
+- **Overrun fuel cut** and a **limp-home mode** on TPS failure with a fixed throttle value
 - **Fuel pump control** with prime on key-on and shutdown when the engine stops
-- **Limp-home mode** on TPS failure with a fixed throttle value
+
+### 🛢️ 2-Stroke Oil Pump (separate lubrication)
+- **Electronic separate lubrication** via a pulsed metering dosing pump – no premix needed
+- **Fuel-proportional metering:** oil is dosed from the fuel actually injected, holding a constant oil : fuel ratio across the whole map
+- **Set up in physical units:** mixture ratio (1 : X), oil volume per stroke, injector flow – the firmware derives the dosing itself
+- **Idle / overrun floor** so the engine is always lubricated, **prime strokes** on power-on, pump stroke-rate limiting
+- **On by default** – a two-stroke must always be lubricated; switch off only when running premix
 
 ### ⚙️ Crank Decoder
 - **Flexible trigger wheels:** single tooth, 4-1, and 5–32 teeth with 1 or 2 missing
@@ -56,6 +68,7 @@ configuration in one place. Tuning is done through TunerStudio, and flashing is 
 
 ### 🌡️ Sensors & Diagnostics
 - TPS (optional second sensor for plausibility check, also counter-rotating), coolant and intake air temperature, battery voltage
+- **Barometric pressure (optional):** BMP280 over SPI – leans the mixture automatically as air density drops with altitude or weather; live pressure shown in TunerStudio
 - **IAT optional:** runs without an intake air sensor
 - **Fault detection:** open and short circuit on all sensors, with fallback values
 - **Bench mode:** all outputs stay safely off when powered by USB only
@@ -63,7 +76,7 @@ configuration in one place. Tuning is done through TunerStudio, and flashing is 
 
 ### 💻 Tuning with TunerStudio
 - **USB and Bluetooth simultaneously:** two equal communication channels
-- **Automatic Bluetooth setup:** HC-05 baud rate and device name configured
+- **Bluetooth via HC-05** in transparent data mode (the module is preconfigured externally once: 115200 baud, name **"ZTech ECU"**)
 - **Live data, datalogging and table editors**, one-click TPS calibration
 - **Power-fail safe storage:** two alternating EEPROM slots with checksum, so a power loss during burn can't corrupt your tune
 
@@ -78,12 +91,14 @@ configuration in one place. Tuning is done through TunerStudio, and flashing is 
 |----------|------------------------------------|-----------------------------------------|
 | **IGN**  | Ignition coil driver               | 1× output · no need for external CDI    |
 | **INJ**  | Injector driver                    | 1× output · high-impedance injectors only |
+| **OIL**  | 2-stroke oil pump driver           | pulsed metering / dosing pump (solenoid) |
 | **FP**   | Fuel pump driver                   |                                         |
 | **TPS**  | Throttle position sensor           | Hall or potentiometer (1- or 2-track)   |
 | **CKP**  | Crankshaft position sensor         | Hall or VR                              |
 | **WSS**  | Wheel speed sensor                 | Hall                                    |
 | **CLT**  | Coolant / engine temperature       | NTC thermistor                          |
-| **IAT**  | Intake air temperature             | NTC thermistor                          |
+| **IAT**  | Intake air temperature             | NTC thermistor · optional               |
+| **BARO** | Barometric pressure                | BMP280 over SPI · optional              |
 | **VBAT** | Battery voltage sensing            |                                         |
 
 <sub>Hall = Hall-effect sensor · VR = variable reluctance · NTC = negative-temperature-coefficient thermistor</sub>
@@ -99,8 +114,10 @@ configuration in one place. Tuning is done through TunerStudio, and flashing is 
 2. The device shows up as *ATmega32U4* (DFU) in the Device Manager
 3. Flash with the tool **Atmel Mega DFU**
 
-> ⚠️ **Don't flash via ISP.** Programming over ISP erases the whole chip, bootloader included.
-> If the bootloader gets lost, restore it once via ISP and set the lock bits to `0xEF`.
+> [!WARNING]
+> **Don't flash via ISP.** Programming over ISP erases the whole chip, bootloader included.
+> Enter bootloader mode only via the BOOT button. If the bootloader gets lost, restore it once
+> via ISP and set the lock bits to `0xEF`.
 
 ### First Start
 After a firmware update with a new EEPROM layout version, the ECU loads default values.
@@ -111,17 +128,12 @@ Connect TunerStudio, **use the values from your project**, and burn them to the 
 1. Create a new project and select `mainController.ini` as the ECU definition
 2. Connect via the ECU's USB COM port, or via Bluetooth after pairing **"ZTech ECU"**
 3. Calibrate the throttle: **Tools → Calibrate TPS**
-4. Set up the trigger wheel under **Basic → Trigger / Crankshaft**
+4. Set up the trigger wheel under **Base → Trigger / Crankshaft**
+5. Set the oil pump (ratio, oil per stroke, pump data) under **Fuel → Oil Pump (2-stroke)**
 
 ## Documentation
 
 Full documentation coming soon.
-
-## Flashing the firmware
-
-> [!WARNING]
-> Flash the firmware **over USB DFU Bootloader only** – no ISP erase, or the bootloader will be
-> lost. Enter bootloader mode only via the BOOT button.
 
 ## Contributing
 
