@@ -26,7 +26,7 @@
 ---
 <div align="center">
   <picture>
-    <img alt="ZTech ECU" src="3D_PCB1_2026-10-30.png" width="680">
+    <img alt="ZTech ECU" src="ZTech_ECU_v0.1_Board.png" width="680">
   </picture>
 </div>
 
