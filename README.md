@@ -12,7 +12,7 @@
   <img alt="Firmware" src="https://img.shields.io/badge/Firmware-v0.01-blue">
   <img alt="MCU"      src="https://img.shields.io/badge/MCU-ATmega32U4-orange">
   <img alt="Engine"   src="https://img.shields.io/badge/Engine-2--stroke%20%C2%B7%201%20cyl-lightgrey">
-  <img alt="Tuning"   src="https://img.shields.io/badge/Tuning-TunerStudio-informational">
+  <img alt="Tuning"   src="https://img.shields.io/badge/Tuning-TunerStudio/VETuner-informational">
   <img alt="License"  src="https://img.shields.io/badge/License-GPLv3-green">
   <img alt="Issues"   src="https://img.shields.io/github/issues/mr-i-k-s/ztech-ecu">
   <img alt="Commit"   src="https://img.shields.io/github/last-commit/mr-i-k-s/ztech-ecu">
@@ -35,7 +35,7 @@
 ZTech ECU is an open engine management system – hardware, firmware and
 configuration in one place. It runs a single-cylinder two-stroke engine: ignition, fuel
 injection (Alpha-N) and electronic **separate lubrication** via a metering oil pump, so no
-premix is required. Tuning is done through TunerStudio, and flashing is done conveniently over
+premix is required. Tuning is done through TunerStudio/VETuner, and flashing is done conveniently over
 USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthusiasts.
 
 ## ✨ Features
@@ -68,13 +68,13 @@ USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthu
 
 ### 🌡️ Sensors & Diagnostics
 - TPS (optional second sensor for plausibility check, also counter-rotating), coolant and intake air temperature, battery voltage
-- **Barometric pressure (optional):** BMP280 over SPI – leans the mixture automatically as air density drops with altitude or weather; live pressure shown in TunerStudio
+- **Barometric pressure (optional):** BMP280 over SPI – leans the mixture automatically as air density drops with altitude or weather; live pressure shown in TunerStudio/VETuner
 - **IAT optional:** runs without an intake air sensor
 - **Fault detection:** open and short circuit on all sensors, with fallback values
 - **Bench mode:** all outputs stay safely off when powered by USB only
 - **Watchdog:** the ECU restarts within 500 ms if the firmware hangs
 
-### 💻 Tuning with TunerStudio
+### 💻 Tuning with TunerStudio/VETuner
 - **USB and Bluetooth simultaneously:** two equal communication channels
 - **Bluetooth via HC-05** in transparent data mode (the module is preconfigured externally once: 115200 baud, name **"ZTech ECU"**)
 - **Live data, datalogging and table editors**, one-click TPS calibration
@@ -121,9 +121,9 @@ USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthu
 
 ### First Start
 After a firmware update with a new EEPROM layout version, the ECU loads default values.
-Connect TunerStudio, **use the values from your project**, and burn them to the ECU.
+Connect TunerStudio/VETuner, **use the values from your project**, and burn them to the ECU.
 
-## 📊 TunerStudio Setup
+## 📊 TunerStudio/VETuner Setup
 
 1. Create a new project and select `mainController.ini` as the ECU definition
 2. Connect via the ECU's USB COM port, or via Bluetooth after pairing **"ZTech ECU"**
