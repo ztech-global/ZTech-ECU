@@ -26,7 +26,7 @@
 ---
 <div align="center">
   <picture>
-    <img alt="ZTech ECU" src="Board & Schematic/ZTech_ECU_v0.1_Board.png" width="680">
+    <img alt="ZTech ECU" src="Board & Schematic/ZTech_ECU_v0.1_Board_Front.png" width="680">
   </picture>
 </div>
 
