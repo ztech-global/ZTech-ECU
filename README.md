@@ -81,7 +81,7 @@ USB. The goal is an affordable, simple, reproducible ECU for hobbyists and enthu
 - **Power-fail safe storage:** two alternating EEPROM slots with checksum, so a power loss during burn can't corrupt your tune
 
 ### 🧩 Under the Hood
-- **ATmega32U4** @ 16 MHz, C++17, no heap, no floating point
+- **ATmega32U4** @ 16 MHz, C++, no heap, no floating point
 - **USB** via LUFA (CDC), firmware updates through the DFU bootloader
 - **Non-blocking design:** all time-critical tasks run on interrupts and timer hardware
 
