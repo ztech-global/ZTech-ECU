@@ -1,7 +1,6 @@
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="logo-dark.png">
-    <img alt="ZTech ECU" src="logo-light.png" width="180">
+    <img alt="ZTech ECU" src="logo-dark.png" width="180">
   </picture>
   <p>Open Source</p>
   <h2>Engine Control Unit</h2>
