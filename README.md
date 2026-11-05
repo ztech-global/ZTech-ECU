@@ -1,6 +1,6 @@
 <div align="center">
   <picture>
-    <img alt="ZTech ECU" src="logo-dark.png" width="180">
+    <img alt="ZTech ECU" src="ztechdot_logo.png" width="180">
   </picture>
   <p>Open Source</p>
   <h2>Engine Control Unit</h2>
